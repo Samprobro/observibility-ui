@@ -364,30 +364,69 @@ const LogsTable = ({ logs }: LogsTableProps) => {
                 </div>
               )}
               <div className="pt-4 border-t border-gray-200">
-                <button
-                  onClick={() => {
-                    const jsonData = {
-                      id: selectedLog.id,
-                      timestamp: selectedLog.timestamp,
-                      level: selectedLog.level,
-                      message: selectedLog.message,
-                      orderId: selectedLog.orderId,
-                      orderStage: selectedLog.orderStage,
-                      exception: selectedLog.exception,
-                      details: selectedLog.details,
-                    };
-                    alert(JSON.stringify(jsonData, null, 2));
-                  }}
-                  className="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent 
-                           text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 
-                           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
-                           transition-colors duration-200"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" />
-                  </svg>
-                  View JSON Data
-                </button>
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => setSelectedLog(null)}
+                    className="flex-1 inline-flex justify-center items-center px-4 py-2.5 border border-transparent 
+                             text-sm font-medium rounded-lg text-white bg-red-600 hover:bg-red-700 
+                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500
+                             transition-colors duration-200"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      const jsonData = {
+                        id: selectedLog.id,
+                        timestamp: selectedLog.timestamp,
+                        level: selectedLog.level,
+                        message: selectedLog.message,
+                        orderId: selectedLog.orderId,
+                        orderStage: selectedLog.orderStage,
+                        exception: selectedLog.exception,
+                        details: selectedLog.details,
+                      };
+                      alert(JSON.stringify(jsonData, null, 2));
+                    }}
+                    className="flex-1 inline-flex justify-center items-center px-4 py-2.5 border border-transparent 
+                             text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 
+                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                             transition-colors duration-200"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" />
+                    </svg>
+                    View JSON
+                  </button>
+                  <button
+                    onClick={() => {
+                      const jsonData = {
+                        id: selectedLog.id,
+                        timestamp: selectedLog.timestamp,
+                        level: selectedLog.level,
+                        message: selectedLog.message,
+                        orderId: selectedLog.orderId,
+                        orderStage: selectedLog.orderStage,
+                        exception: selectedLog.exception,
+                        details: selectedLog.details,
+                      };
+                      alert(`Pushing log data:\n${JSON.stringify(jsonData, null, 2)}`);
+                    }}
+                    className="flex-1 inline-flex justify-center items-center px-4 py-2.5 border border-transparent 
+                             text-sm font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 
+                             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500
+                             transition-colors duration-200"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 3a1 1 0 00-1 1v4.586l-2.293-2.293a1 1 0 10-1.414 1.414l4 4a1 1 0 001.414 0l4-4a1 1 0 00-1.414-1.414L11 8.586V4a1 1 0 00-1-1z" clipRule="evenodd" />
+                      <path fillRule="evenodd" d="M4 12a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1z" clipRule="evenodd" />
+                    </svg>
+                    Push
+                  </button>
+                </div>
               </div>
             </div>
           </div>
