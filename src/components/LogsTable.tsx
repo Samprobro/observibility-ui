@@ -64,7 +64,6 @@ const LogsTable = ({ logs }: LogsTableProps) => {
   // Handle alert for old logs
   const handleOldLogAlert = (log: LogEntry) => {
     if (isLogOld(log.id)) {
-      const elapsedTime = formatElapsedTime(timeElapsed[log.id]);
       // alert(`Alert: Log entry is ${elapsedTime.text} old!\nLog Message: ${log.message}`);
     }
     setSelectedLog(log);
@@ -403,17 +402,6 @@ const LogsTable = ({ logs }: LogsTableProps) => {
                   </button>
                   <button
                     onClick={() => {
-                      const jsonData = {
-                        id: selectedLog.id,
-                        timestamp: selectedLog.timestamp,
-                        level: selectedLog.level,
-                        message: selectedLog.message,
-                        orderId: selectedLog.orderId,
-                        orderStage: selectedLog.orderStage,
-                        exception: selectedLog.exception,
-                        details: selectedLog.details,
-                      };
-                      // alert(`Pushing this order to Dynatrace\n\nOrder Details:\n${JSON.stringify(jsonData, null, 2)}`);
                       alert(`Pushing this order to Dynatrace\n\nOrder ID: ${selectedLog.orderId}\nStatus: ${selectedLog.orderStage}`);
                     }}
                     className="flex-1 inline-flex justify-center items-center px-4 py-2.5 border border-transparent 
