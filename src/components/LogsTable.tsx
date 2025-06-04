@@ -303,7 +303,7 @@ const LogsTable = ({ logs }: LogsTableProps) => {
 
       {/* Modal with improved styling */}
       {selectedLog && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl max-w-2xl w-full p-6 shadow-xl">
             <div className="flex justify-between items-start border-b border-gray-200 pb-4">
               <h3 className="text-lg font-semibold text-gray-900">Log Details</h3>
@@ -363,6 +363,32 @@ const LogsTable = ({ logs }: LogsTableProps) => {
                   </pre>
                 </div>
               )}
+              <div className="pt-4 border-t border-gray-200">
+                <button
+                  onClick={() => {
+                    const jsonData = {
+                      id: selectedLog.id,
+                      timestamp: selectedLog.timestamp,
+                      level: selectedLog.level,
+                      message: selectedLog.message,
+                      orderId: selectedLog.orderId,
+                      orderStage: selectedLog.orderStage,
+                      exception: selectedLog.exception,
+                      details: selectedLog.details,
+                    };
+                    alert(JSON.stringify(jsonData, null, 2));
+                  }}
+                  className="w-full inline-flex justify-center items-center px-4 py-2.5 border border-transparent 
+                           text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 
+                           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                           transition-colors duration-200"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" />
+                  </svg>
+                  View JSON Data
+                </button>
+              </div>
             </div>
           </div>
         </div>

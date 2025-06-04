@@ -98,7 +98,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+    <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
       {cards.map((card) => (
         <div
           key={card.title}
@@ -107,7 +107,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
             bg-gradient-to-br ${card.gradient}
             backdrop-blur-sm 
             rounded-2xl 
-            border border-white/20
+            border border-white/10
             shadow-lg ${card.borderGlow}
             transition-all duration-300 
             hover:scale-105 
