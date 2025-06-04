@@ -65,7 +65,7 @@ const LogsTable = ({ logs }: LogsTableProps) => {
   const handleOldLogAlert = (log: LogEntry) => {
     if (isLogOld(log.id)) {
       const elapsedTime = formatElapsedTime(timeElapsed[log.id]);
-      alert(`Alert: Log entry is ${elapsedTime.text} old!\nLog Message: ${log.message}`);
+      // alert(`Alert: Log entry is ${elapsedTime.text} old!\nLog Message: ${log.message}`);
     }
     setSelectedLog(log);
   };
@@ -413,7 +413,8 @@ const LogsTable = ({ logs }: LogsTableProps) => {
                         exception: selectedLog.exception,
                         details: selectedLog.details,
                       };
-                      alert(`Pushing log data:\n${JSON.stringify(jsonData, null, 2)}`);
+                      // alert(`Pushing this order to Dynatrace\n\nOrder Details:\n${JSON.stringify(jsonData, null, 2)}`);
+                      alert(`Pushing this order to Dynatrace\n\nOrder ID: ${selectedLog.orderId}\nStatus: ${selectedLog.orderStage}`);
                     }}
                     className="flex-1 inline-flex justify-center items-center px-4 py-2.5 border border-transparent 
                              text-sm font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 
