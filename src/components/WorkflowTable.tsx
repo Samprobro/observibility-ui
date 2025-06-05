@@ -33,20 +33,84 @@ export default function WorkflowTable({ logs }: WorkflowTableProps) {
   // Get current stage for the order
   const currentStage = workflows[orderId]?.stages.slice(-1)[0]?.stage || 'Unknown';
 
+  // Transform workflow stages for diagram
+  const workflowStages = [
+    {
+      id: 'order-received',
+      name: 'Order Received',
+      status: 'completed' as const,
+      timestamp: '2024-03-05T15:30:00',
+      details: {
+        customer: 'John Doe',
+        total: '$599.99',
+        items: 3
+      }
+    },
+    {
+      id: 'payment-processing',
+      name: 'Payment Processing',
+      status: 'completed' as const,
+      timestamp: '2024-03-05T15:31:00',
+      details: {
+        method: 'Credit Card',
+        transaction: 'TXN-789012'
+      }
+    },
+    {
+      id: 'inventory-check',
+      name: 'Inventory Check',
+      status: 'completed' as const,
+      timestamp: '2024-03-05T15:32:00',
+      details: {
+        warehouse: 'NYC-01',
+        availability: 'In Stock'
+      }
+    },
+    {
+      id: 'packaging',
+      name: 'Packaging',
+      status: 'completed' as const,
+      timestamp: '2024-03-05T15:45:00',
+      details: {
+        package: 'Standard Box',
+        weight: '2.5 kg'
+      }
+    },
+    {
+      id: 'shipping',
+      name: 'Shipping',
+      status: 'in-progress' as const,
+      timestamp: '2024-03-05T16:00:00',
+      details: {
+        carrier: 'FedEx',
+        tracking: 'FDX123456789'
+      }
+    },
+    {
+      id: 'delivery',
+      name: 'Delivery',
+      status: 'pending' as const,
+      details: {
+        eta: '2024-03-07',
+        address: '123 Main St'
+      }
+    }
+  ];
+
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow">
         <div className="px-4 py-3 border-b border-gray-200">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <h3 className="text-lg font-medium text-gray-900">Current Stage:</h3>
+              <h3 className="text-lg font-medium text-gray-900">Order Flow:</h3>
               <span className="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded">
                 {currentStage}
               </span>
             </div>
           </div>
         </div>
-        <WorkflowDiagram />
+        <WorkflowDiagram stages={workflowStages} />
       </div>
       
       <div className="bg-white rounded-lg shadow overflow-hidden">

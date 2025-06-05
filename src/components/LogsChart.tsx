@@ -8,6 +8,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  TooltipItem,
 } from 'chart.js';
 
 ChartJS.register(
@@ -70,8 +71,8 @@ export default function LogsChart({ logs }: LogsChartProps) {
       },
       tooltip: {
         callbacks: {
-          label: (context: any) => {
-            const value = context.raw || 0;
+          label: (context: TooltipItem<'bar'>) => {
+            const value = context.raw as number || 0;
             const total = logs.length;
             const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0';
             return `Count: ${value} (${percentage}%)`;
