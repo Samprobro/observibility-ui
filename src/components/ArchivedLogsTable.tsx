@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { LogEntry, LogLevel } from '@/types/logs';
-import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
+import { ChevronUpIcon, ChevronDownIcon, ArrowPathIcon } from '@heroicons/react/20/solid';
 
 interface ArchivedLogsTableProps {
   logs: LogEntry[];
+  onViewWorkflow?: (orderId: string) => void;
 }
 
 interface Filters {
@@ -16,7 +17,7 @@ interface Filters {
 type SortField = 'level' | 'timestamp' | 'orderId' | 'message';
 type SortDirection = 'asc' | 'desc';
 
-export default function ArchivedLogsTable({ logs }: ArchivedLogsTableProps) {
+export default function ArchivedLogsTable({ logs, onViewWorkflow }: ArchivedLogsTableProps) {
   const [filters, setFilters] = useState<Filters>({
     orderId: '',
     level: '',
@@ -118,12 +119,11 @@ export default function ArchivedLogsTable({ logs }: ArchivedLogsTableProps) {
                 onChange={(e) => setFilters(prev => ({ ...prev, level: e.target.value as LogLevel | '' }))}
                 className="block w-full rounded-md border border-gray-300 bg-gray-50 px-4 py-2.5 text-black appearance-none pr-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               >
-                <option value="" className="text-gray-400">All Levels</option>
-                <option value="ERROR" className="text-black">Error</option>
-                <option value="WARNING" className="text-black">Warning</option>
-                <option value="INFO" className="text-black">Info</option>
-                <option value="DEBUG" className="text-black">Debug</option>
-                <option value="FATAL" className="text-black">Fatal</option>
+                <option value="">All Levels</option>
+                <option value="error">Error</option>
+                <option value="warn">Warning</option>
+                <option value="info">Info</option>
+                <option value="debug">Debug</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
                 <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -217,6 +217,9 @@ export default function ArchivedLogsTable({ logs }: ArchivedLogsTableProps) {
               >
                 Message <SortIcon field="message" />
               </th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -224,12 +227,11 @@ export default function ArchivedLogsTable({ logs }: ArchivedLogsTableProps) {
               <tr key={index} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                    ${log.level === 'ERROR' ? 'bg-red-100 text-red-800' :
-                      log.level === 'WARNING' ? 'bg-yellow-100 text-yellow-800' :
-                      log.level === 'INFO' ? 'bg-blue-100 text-blue-800' :
-                      log.level === 'FATAL' ? 'bg-purple-100 text-purple-800' :
+                    ${log.level === 'error' ? 'bg-red-100 text-red-800' :
+                      log.level === 'warn' ? 'bg-yellow-100 text-yellow-800' :
+                      log.level === 'info' ? 'bg-blue-100 text-blue-800' :
                       'bg-green-100 text-green-800'}`}>
-                    {log.level}
+                    {log.level.toUpperCase()}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -243,6 +245,17 @@ export default function ArchivedLogsTable({ logs }: ArchivedLogsTableProps) {
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-900 max-w-xl truncate">
                   {log.message}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  {log.orderId && (
+                    <button
+                      onClick={() => onViewWorkflow?.(log.orderId!)}
+                      className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-md hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-150"
+                    >
+                      <ArrowPathIcon className="h-4 w-4 mr-1.5" />
+                      View Workflow
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

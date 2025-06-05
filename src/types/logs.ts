@@ -1,4 +1,4 @@
-export type LogLevel = 'ERROR' | 'FATAL' | 'INFO' | 'WARNING' | 'DEBUG';
+export type LogLevel = 'error' | 'warn' | 'info' | 'debug';
 
 export interface LogDetails {
   customerEmail?: string;
@@ -15,13 +15,14 @@ export interface LogEntry {
   timestamp: string;
   level: LogLevel;
   message: string;
-  orderId?: string;
+  orderId: string;
   orderStage?: string;
   exception?: string;
   details?: LogDetails;
   traceId?: string;
   source?: string;
   metadata?: Record<string, MetadataValue>;
+  service: string;
 }
 
 export interface LogStats {

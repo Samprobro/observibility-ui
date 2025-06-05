@@ -5,16 +5,22 @@ import { LogStats, LogEntry } from '@/types/logs';
 import LogsTable from '@/components/LogsTable';
 import LogsChart from '@/components/LogsChart';
 import StatsCards from '@/components/StatsCards';
+import ArchivedLogsTable from '@/components/ArchivedLogsTable';
+import WorkflowTable from '@/components/WorkflowTable';
 import {
   Cog6ToothIcon,
   AdjustmentsHorizontalIcon,
   SignalIcon,
+  ChartBarIcon,
+  ClockIcon,
+  ShareIcon,
 } from '@heroicons/react/24/outline';
-import ArchivedLogsTable from '@/components/ArchivedLogsTable';
 
 export default function Dashboard() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [isLive, setIsLive] = useState(true);
+  const [activeTab, setActiveTab] = useState('current');
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [stats, setStats] = useState<LogStats>({
     errorCount: 0,
     fatalCount: 0,
@@ -23,7 +29,6 @@ export default function Dashboard() {
     debugCount: 0,
     totalCount: 0,
   });
-  const [activeTab, setActiveTab] = useState('current');
 
   // Simulated data fetching - replace with your actual API endpoint
   useEffect(() => {
@@ -45,6 +50,13 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, []);
 
+  // Reset selectedOrderId when switching away from workflow tab
+  useEffect(() => {
+    if (activeTab !== 'workflow') {
+      setSelectedOrderId(null);
+    }
+  }, [activeTab]);
+
   const handlePreferencesClick = () => {
     alert('Opening Preferences Panel\n\nCustomize your dashboard settings, filters, and view options.');
   };
@@ -56,6 +68,11 @@ export default function Dashboard() {
   const handleLiveToggle = () => {
     setIsLive(!isLive);
     alert(`${!isLive ? 'Enabling' : 'Disabling'} Live Updates\n\nData refresh interval: ${!isLive ? '5 minutes' : 'paused'}`);
+  };
+
+  const handleViewWorkflow = (orderId: string) => {
+    setSelectedOrderId(orderId);
+    setActiveTab('workflow');
   };
 
   return (
@@ -147,15 +164,7 @@ export default function Dashboard() {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 } whitespace-nowrap py-4 px-1 font-medium text-sm border-b-2 transition-all duration-200 ease-in-out flex items-center space-x-2`}
               >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className={`h-5 w-5 ${activeTab === 'current' ? 'text-indigo-600' : 'text-gray-400'}`}
-                  viewBox="0 0 20 20" 
-                  fill="currentColor"
-                >
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                  <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                </svg>
+                <ChartBarIcon className={`h-5 w-5 ${activeTab === 'current' ? 'text-indigo-600' : 'text-gray-400'}`} />
                 <span>Current Logs</span>
                 {activeTab === 'current' && (
                   <span className="ml-2 bg-indigo-100 text-indigo-600 py-0.5 px-2.5 rounded-full text-xs font-medium">
@@ -172,19 +181,42 @@ export default function Dashboard() {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 } whitespace-nowrap py-4 px-1 font-medium text-sm border-b-2 transition-all duration-200 ease-in-out flex items-center space-x-2`}
               >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className={`h-5 w-5 ${activeTab === 'archived' ? 'text-indigo-600' : 'text-gray-400'}`}
-                  viewBox="0 0 20 20" 
-                  fill="currentColor"
-                >
-                  <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
-                  <path fillRule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clipRule="evenodd" />
-                </svg>
+                <ClockIcon className={`h-5 w-5 ${activeTab === 'archived' ? 'text-indigo-600' : 'text-gray-400'}`} />
                 <span>Archived Records</span>
                 {activeTab === 'archived' && (
                   <span className="ml-2 bg-indigo-100 text-indigo-600 py-0.5 px-2.5 rounded-full text-xs font-medium">
                     Active
+                  </span>
+                )}
+              </button>
+
+              <button
+                disabled={!selectedOrderId}
+                onClick={() => selectedOrderId && setActiveTab('workflow')}
+                className={`${
+                  activeTab === 'workflow'
+                    ? 'border-indigo-500 text-indigo-600 relative before:absolute before:bottom-0 before:left-0 before:w-full before:h-0.5 before:bg-indigo-500'
+                    : !selectedOrderId
+                    ? 'border-transparent text-gray-400 cursor-not-allowed'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                } whitespace-nowrap py-4 px-1 font-medium text-sm border-b-2 transition-all duration-200 ease-in-out flex items-center space-x-2`}
+              >
+                <ShareIcon className={`h-5 w-5 ${
+                  activeTab === 'workflow' 
+                    ? 'text-indigo-600' 
+                    : !selectedOrderId 
+                    ? 'text-gray-300'
+                    : 'text-gray-400'
+                }`} />
+                <span>Workflow View</span>
+                {activeTab === 'workflow' && (
+                  <span className="ml-2 bg-indigo-100 text-indigo-600 py-0.5 px-2.5 rounded-full text-xs font-medium">
+                    Active
+                  </span>
+                )}
+                {!selectedOrderId && (
+                  <span className="ml-2 text-xs text-gray-400">
+                    Select an order first
                   </span>
                 )}
               </button>
@@ -200,13 +232,51 @@ export default function Dashboard() {
                 </h3>
                 <LogsTable logs={logs} />
               </div>
-            ) : (
+            ) : activeTab === 'archived' ? (
               <div className="space-y-4">
                 <h3 className="text-lg font-medium text-gray-900 flex items-center space-x-2">
                   <span>Archived Records</span>
                   <span className="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Historical</span>
                 </h3>
-                <ArchivedLogsTable logs={logs} />
+                <ArchivedLogsTable 
+                  logs={logs} 
+                  onViewWorkflow={handleViewWorkflow}
+                />
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {!selectedOrderId ? (
+                  <div className="text-center py-12">
+                    <div className="mx-auto h-12 w-12 text-gray-400">
+                      <ShareIcon className="h-full w-full" />
+                    </div>
+                    <h3 className="mt-2 text-sm font-medium text-gray-900">No workflow selected</h3>
+                    <p className="mt-1 text-sm text-gray-500">
+                      Select a workflow from the Archived Records tab to view its details
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-medium text-gray-900 flex items-center space-x-2">
+                        <span>Order Workflow</span>
+                        <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                          {selectedOrderId}
+                        </span>
+                      </h3>
+                      <button
+                        onClick={() => {
+                          setSelectedOrderId(null);
+                          setActiveTab('archived');
+                        }}
+                        className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-150"
+                      >
+                        Back to Records
+                      </button>
+                    </div>
+                    <WorkflowTable logs={logs.filter(log => log.orderId === selectedOrderId)} />
+                  </>
+                )}
               </div>
             )}
           </div>

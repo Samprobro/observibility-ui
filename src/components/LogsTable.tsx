@@ -102,13 +102,12 @@ const LogsTable = ({ logs }: LogsTableProps) => {
     }
   };
 
-  const getLevelColor = (level: LogLevel) => {
-    const colors = {
-      ERROR: 'text-red-600 bg-red-50',
-      FATAL: 'text-red-900 bg-red-100',
-      WARNING: 'text-yellow-600 bg-yellow-50',
-      INFO: 'text-blue-600 bg-blue-50',
-      DEBUG: 'text-gray-600 bg-gray-50',
+  const getLogLevelColor = (level: LogLevel) => {
+    const colors: Record<LogLevel, string> = {
+      error: 'text-red-800 bg-red-50',
+      warn: 'text-yellow-800 bg-yellow-50',
+      info: 'text-blue-800 bg-blue-50',
+      debug: 'text-gray-600 bg-gray-50',
     };
     return colors[level];
   };
@@ -117,21 +116,20 @@ const LogsTable = ({ logs }: LogsTableProps) => {
     <div className="space-y-4">
       <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow">
         <div className="flex gap-2 overflow-x-auto pb-2">
-          {(['ALL', 'ERROR', 'FATAL', 'WARNING', 'INFO', 'DEBUG'] as const).map(
-            (level) => (
-              <button
-                key={level}
-                onClick={() => setFilterLevel(level)}
-                className={`px-4 py-2 rounded-full text-sm font-medium min-w-[80px] ${
-                  filterLevel === level
-                    ? 'bg-indigo-100 text-indigo-700 border-2 border-indigo-200'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border-2 border-transparent'
-                }`}
-              >
-                {level}
-              </button>
-            )
-          )}
+          <select
+            value={filterLevel}
+            onChange={(e) => setFilterLevel(e.target.value as LogLevel | 'ALL')}
+            className="block w-32 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          >
+            <option value="ALL">All Levels</option>
+            <option value="error">Error</option>
+            <option value="warn">Warning</option>
+            <option value="info">Info</option>
+            <option value="debug">Debug</option>
+          </select>
+          <span className="text-sm text-gray-500">
+            Showing {filteredLogs.length} of {logs.length} logs
+          </span>
         </div>
       </div>
 
@@ -197,7 +195,7 @@ const LogsTable = ({ logs }: LogsTableProps) => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-3 py-1.5 text-sm font-medium rounded-full inline-block min-w-[90px] text-center ${getLevelColor(
+                      className={`px-3 py-1.5 text-sm font-medium rounded-full inline-block min-w-[90px] text-center ${getLogLevelColor(
                         log.level
                       )}`}
                     >
@@ -323,7 +321,7 @@ const LogsTable = ({ logs }: LogsTableProps) => {
               <div>
                 <h4 className="text-sm font-medium text-gray-500">Level</h4>
                 <p
-                  className={`mt-2 inline-flex px-3 py-1.5 rounded-full text-sm font-medium ${getLevelColor(
+                  className={`mt-2 inline-flex px-3 py-1.5 rounded-full text-sm font-medium ${getLogLevelColor(
                     selectedLog.level
                   )}`}
                 >
