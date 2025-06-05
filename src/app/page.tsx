@@ -59,42 +59,68 @@ export default function Dashboard() {
   return (
     <main className="min-h-screen p-8 bg-gray-50">
       <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900">Sales Order Digital Twin</h1>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handlePreferencesClick}
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200"
-              title="Open Preferences"
-            >
-              <AdjustmentsHorizontalIcon className="w-6 h-6" />
-              <span className="sr-only">Preferences</span>
-            </button>
-            <button
-              onClick={handleSettingsClick}
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200"
-              title="Open Settings"
-            >
-              <Cog6ToothIcon className="w-6 h-6" />
-              <span className="sr-only">Settings</span>
-            </button>
-            <button
-              onClick={handleLiveToggle}
-              className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm transition-colors duration-200
-                ${isLive 
-                  ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' 
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
-              title={isLive ? 'Disable Live Updates' : 'Enable Live Updates'}
-            >
-              <SignalIcon className="w-5 h-5" />
-              <span>Live</span>
-              {isLive && (
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-              )}
-            </button>
+        <div className="bg-[#eceaea] rounded-xl shadow-sm overflow-hidden">
+          <div className="flex justify-between items-center px-8 py-6 border-b border-gray-200/30">
+            <div className="flex items-center space-x-4">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                Sales Order Digital Twin
+              </h1>
+              <div className="h-8 w-px bg-gray-300/50"></div>
+              <span className="px-3 py-1 rounded-full text-sm font-medium bg-white/80 text-gray-600 shadow-sm">
+                Production
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handlePreferencesClick}
+                className="p-2 text-gray-600 hover:text-gray-900 bg-white/80 hover:bg-white rounded-lg transition-all duration-200 shadow-sm"
+                title="Open Preferences"
+              >
+                <AdjustmentsHorizontalIcon className="w-6 h-6" />
+                <span className="sr-only">Preferences</span>
+              </button>
+              <button
+                onClick={handleSettingsClick}
+                className="p-2 text-gray-600 hover:text-gray-900 bg-white/80 hover:bg-white rounded-lg transition-all duration-200 shadow-sm"
+                title="Open Settings"
+              >
+                <Cog6ToothIcon className="w-6 h-6" />
+                <span className="sr-only">Settings</span>
+              </button>
+              <button
+                onClick={handleLiveToggle}
+                className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 shadow-sm
+                  ${isLive 
+                    ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' 
+                    : 'bg-white/80 text-gray-600 hover:bg-white'}`}
+                title={isLive ? 'Disable Live Updates' : 'Enable Live Updates'}
+              >
+                <SignalIcon className="w-5 h-5" />
+                <span>Live</span>
+                {isLive && (
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+          <div className="px-8 py-3 bg-white/40 backdrop-blur-sm">
+            <div className="flex items-center gap-6 text-sm text-gray-600">
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Environment:</span>
+                <span>Production</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Region:</span>
+                <span>US-West</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Last Updated:</span>
+                <span>Just now</span>
+              </div>
+            </div>
           </div>
         </div>
         
