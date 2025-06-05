@@ -7,6 +7,9 @@ export interface LogDetails {
   [key: string]: string | number | undefined;
 }
 
+// Define a more specific type for metadata values
+export type MetadataValue = string | number | boolean | null | { [key: string]: MetadataValue } | MetadataValue[];
+
 export interface LogEntry {
   id: string;
   timestamp: string;
@@ -16,6 +19,9 @@ export interface LogEntry {
   orderStage?: string;
   exception?: string;
   details?: LogDetails;
+  traceId?: string;
+  source?: string;
+  metadata?: Record<string, MetadataValue>;
 }
 
 export interface LogStats {

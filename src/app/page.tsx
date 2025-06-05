@@ -10,6 +10,7 @@ import {
   AdjustmentsHorizontalIcon,
   SignalIcon,
 } from '@heroicons/react/24/outline';
+import ArchivedLogsTable from '@/components/ArchivedLogsTable';
 
 export default function Dashboard() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -22,6 +23,7 @@ export default function Dashboard() {
     debugCount: 0,
     totalCount: 0,
   });
+  const [activeTab, setActiveTab] = useState('current');
 
   // Simulated data fetching - replace with your actual API endpoint
   useEffect(() => {
@@ -134,9 +136,45 @@ export default function Dashboard() {
           <LogsChart logs={logs} />
         </div>
         
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-900">Log Entries</h2>
-          <LogsTable logs={logs} />
+        <div className="bg-white rounded-lg shadow">
+          <div className="border-b border-gray-200">
+            <nav className="flex -mb-px" aria-label="Tabs">
+              <button
+                onClick={() => setActiveTab('current')}
+                className={`${
+                  activeTab === 'current'
+                    ? 'border-indigo-500 text-indigo-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                } whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm`}
+              >
+                Current Logs
+              </button>
+              <button
+                onClick={() => setActiveTab('archived')}
+                className={`${
+                  activeTab === 'archived'
+                    ? 'border-indigo-500 text-indigo-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                } whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm`}
+              >
+                Log Transition
+              </button>
+            </nav>
+          </div>
+          
+          <div className="p-6">
+            {activeTab === 'current' ? (
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Log Entries</h3>
+                <LogsTable logs={logs} />
+              </div>
+            ) : (
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Archived Records</h3>
+                <ArchivedLogsTable logs={logs} />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </main>
