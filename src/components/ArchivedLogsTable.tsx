@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { LogEntry, LogLevel } from '@/types/logs';
+import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 
 interface ArchivedLogsTableProps {
   logs: LogEntry[];
@@ -12,6 +13,9 @@ interface Filters {
   endDate: string;
 }
 
+type SortField = 'level' | 'timestamp' | 'orderId' | 'message';
+type SortDirection = 'asc' | 'desc';
+
 export default function ArchivedLogsTable({ logs }: ArchivedLogsTableProps) {
   const [filters, setFilters] = useState<Filters>({
     orderId: '',
@@ -20,6 +24,24 @@ export default function ArchivedLogsTable({ logs }: ArchivedLogsTableProps) {
     endDate: '',
   });
 
+  // Sorting state
+  const [sortField, setSortField] = useState<SortField>('timestamp');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const handleSort = (field: SortField) => {
+    if (field === sortField) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  // Filter logs
   const filteredLogs = logs.filter(log => {
     const matchesOrderId = !filters.orderId || log.orderId?.toLowerCase().includes(filters.orderId.toLowerCase());
     const matchesLevel = !filters.level || log.level === filters.level;
@@ -28,6 +50,42 @@ export default function ArchivedLogsTable({ logs }: ArchivedLogsTableProps) {
     
     return matchesOrderId && matchesLevel && matchesDateRange;
   });
+
+  // Sort logs
+  const sortedLogs = [...filteredLogs].sort((a, b) => {
+    let comparison = 0;
+    switch (sortField) {
+      case 'level':
+        comparison = a.level.localeCompare(b.level);
+        break;
+      case 'timestamp':
+        comparison = new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+        break;
+      case 'orderId':
+        comparison = (a.orderId || '').localeCompare(b.orderId || '');
+        break;
+      case 'message':
+        comparison = a.message.localeCompare(b.message);
+        break;
+    }
+    return sortDirection === 'asc' ? comparison : -comparison;
+  });
+
+  // Pagination
+  const totalPages = Math.ceil(sortedLogs.length / itemsPerPage);
+  const paginatedLogs = sortedLogs.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const SortIcon = ({ field }: { field: SortField }) => {
+    if (field !== sortField) return null;
+    return sortDirection === 'asc' ? (
+      <ChevronUpIcon className="h-5 w-5 inline-block ml-1" />
+    ) : (
+      <ChevronDownIcon className="h-5 w-5 inline-block ml-1" />
+    );
+  };
 
   return (
     <div className="space-y-4">
@@ -53,19 +111,26 @@ export default function ArchivedLogsTable({ logs }: ArchivedLogsTableProps) {
             <label htmlFor="level" className="block text-sm font-medium text-gray-700 mb-1">
               Log Level
             </label>
-            <select
-              id="level"
-              value={filters.level}
-              onChange={(e) => setFilters(prev => ({ ...prev, level: e.target.value as LogLevel | '' }))}
-              className="block w-full rounded-md border border-gray-300 bg-gray-50 px-4 py-2.5 text-black placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            >
-              <option value="">All Levels</option>
-              <option value="ERROR">Error</option>
-              <option value="WARNING">Warning</option>
-              <option value="INFO">Info</option>
-              <option value="DEBUG">Debug</option>
-              <option value="FATAL">Fatal</option>
-            </select>
+            <div className="relative">
+              <select
+                id="level"
+                value={filters.level}
+                onChange={(e) => setFilters(prev => ({ ...prev, level: e.target.value as LogLevel | '' }))}
+                className="block w-full rounded-md border border-gray-300 bg-gray-50 px-4 py-2.5 text-black appearance-none pr-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              >
+                <option value="" className="text-gray-400">All Levels</option>
+                <option value="ERROR" className="text-black">Error</option>
+                <option value="WARNING" className="text-black">Warning</option>
+                <option value="INFO" className="text-black">Info</option>
+                <option value="DEBUG" className="text-black">Debug</option>
+                <option value="FATAL" className="text-black">Fatal</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </div>
+            </div>
           </div>
 
           <div>
@@ -110,7 +175,7 @@ export default function ArchivedLogsTable({ logs }: ArchivedLogsTableProps) {
 
       {/* Results Count */}
       <div className="text-sm text-gray-600">
-        Showing {filteredLogs.length} of {logs.length} records <br />
+        Showing {paginatedLogs.length} of {filteredLogs.length} records <br />
         <span className="text-xs text-gray-400">
           <span className="font-medium font-semibold text-black">Note:</span> This is a sample of the logs. The actual logs are stored in the database.
         </span>
@@ -121,25 +186,41 @@ export default function ArchivedLogsTable({ logs }: ArchivedLogsTableProps) {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
+              <th 
+                scope="col" 
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                onClick={() => handleSort('level')}
+              >
+                Status <SortIcon field="level" />
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Order ID
+              <th 
+                scope="col" 
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                onClick={() => handleSort('orderId')}
+              >
+                Order ID <SortIcon field="orderId" />
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Timestamp
+              <th 
+                scope="col" 
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                onClick={() => handleSort('timestamp')}
+              >
+                Timestamp <SortIcon field="timestamp" />
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Trace ID
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Message
+              <th 
+                scope="col" 
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                onClick={() => handleSort('message')}
+              >
+                Message <SortIcon field="message" />
               </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredLogs.map((log, index) => (
+            {paginatedLogs.map((log, index) => (
               <tr key={index} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
@@ -167,6 +248,82 @@ export default function ArchivedLogsTable({ logs }: ArchivedLogsTableProps) {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 rounded-lg">
+        <div className="flex flex-1 justify-between sm:hidden">
+          <button
+            onClick={() => setCurrentPage(page => Math.max(1, page - 1))}
+            disabled={currentPage === 1}
+            className={`relative inline-flex items-center rounded-md px-4 py-2 text-sm font-medium ${
+              currentPage === 1
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
+            } border border-gray-300`}
+          >
+            Previous
+          </button>
+          <button
+            onClick={() => setCurrentPage(page => Math.min(totalPages, page + 1))}
+            disabled={currentPage === totalPages}
+            className={`relative ml-3 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium ${
+              currentPage === totalPages
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-white text-gray-700 hover:bg-gray-50'
+            } border border-gray-300`}
+          >
+            Next
+          </button>
+        </div>
+        <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+          <div>
+            <p className="text-sm text-gray-700">
+              Showing <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> to{' '}
+              <span className="font-medium">
+                {Math.min(currentPage * itemsPerPage, filteredLogs.length)}
+              </span>{' '}
+              of <span className="font-medium">{filteredLogs.length}</span> results
+            </p>
+          </div>
+          <div>
+            <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+              <button
+                onClick={() => setCurrentPage(page => Math.max(1, page - 1))}
+                disabled={currentPage === 1}
+                className={`relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${
+                  currentPage === 1 ? 'cursor-not-allowed' : 'hover:text-gray-700'
+                }`}
+              >
+                <span className="sr-only">Previous</span>
+                <ChevronDownIcon className="h-5 w-5 rotate-90" aria-hidden="true" />
+              </button>
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
+                    currentPage === i + 1
+                      ? 'z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+                      : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0'
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage(page => Math.min(totalPages, page + 1))}
+                disabled={currentPage === totalPages}
+                className={`relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${
+                  currentPage === totalPages ? 'cursor-not-allowed' : 'hover:text-gray-700'
+                }`}
+              >
+                <span className="sr-only">Next</span>
+                <ChevronDownIcon className="h-5 w-5 -rotate-90" aria-hidden="true" />
+              </button>
+            </nav>
+          </div>
+        </div>
       </div>
     </div>
   );
