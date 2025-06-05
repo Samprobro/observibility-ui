@@ -87,23 +87,38 @@ export default function LogsChart({ logs }: LogsChartProps) {
           precision: 0,
         },
       },
+      x: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          padding: 12
+        }
+      }
     },
+    layout: {
+      padding: {
+        bottom: 50
+      }
+    }
   };
 
   return (
-    <div className="relative h-[300px] w-full">
+    <div className="relative h-[350px] w-full">
       <Bar data={chartData} options={options} />
-      <div className="absolute bottom-0 w-full flex justify-center gap-4 pb-2">
+      <br /> 
+      <div className="absolute bottom-4 w-full flex justify-center gap-4 pb-2 mt-1 pt-15">
         {chartData.labels.map((label, index) => (
-          <div key={label} className="flex items-center gap-2">
+          <div key={label} className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm">
             <div 
               className="w-3 h-3 rounded-full" 
               style={{ backgroundColor: chartData.datasets[0].borderColor[index] as string }}
             />
-            <span className="text-sm text-gray-600">{label}</span>
+            <span className="text-sm text-gray-600 font-medium">{label}</span>
           </div>
         ))}
       </div>
+      
     </div>
   );
 } 
