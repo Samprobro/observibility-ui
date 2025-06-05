@@ -119,14 +119,19 @@ const LogsTable = ({ logs }: LogsTableProps) => {
           <select
             value={filterLevel}
             onChange={(e) => setFilterLevel(e.target.value as LogLevel | 'ALL')}
-            className="block w-32 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            className="block w-32 rounded-md border-gray-300 bg-gray-50 px-4 py-2.5 text-black appearance-none pr-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           >
-            <option value="ALL">All Levels</option>
-            <option value="error">Error</option>
-            <option value="warn">Warning</option>
-            <option value="info">Info</option>
-            <option value="debug">Debug</option>
+            <option value="ALL" className="text-gray-400">All Levels</option>
+            <option value="error" className="text-black font-medium">Error</option>
+            <option value="warn" className="text-black font-medium">Warning</option>
+            <option value="info" className="text-black font-medium">Info</option>
+            <option value="debug" className="text-black font-medium">Debug</option>
           </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+            <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
+          </div>
           <span className="text-sm text-gray-500">
             Showing {filteredLogs.length} of {logs.length} logs
           </span>
