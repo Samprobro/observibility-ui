@@ -110,7 +110,10 @@ export default function ArchivedLogsTable({ logs }: ArchivedLogsTableProps) {
 
       {/* Results Count */}
       <div className="text-sm text-gray-600">
-        Showing {filteredLogs.length} of {logs.length} records
+        Showing {filteredLogs.length} of {logs.length} records <br />
+        <span className="text-xs text-gray-400">
+          <span className="font-medium font-semibold text-black">Note:</span> This is a sample of the logs. The actual logs are stored in the database.
+        </span>
       </div>
 
       {/* Table */}
