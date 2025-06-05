@@ -42,13 +42,13 @@ const CustomNode = ({ data }: { data: WorkflowStage }) => {
   const getStatusColor = (status: WorkflowStage['status']) => {
     switch (status) {
       case 'completed':
-        return 'bg-green-50 border-green-200';
+        return 'border-green-500 text-green-700 bg-gradient-to-br from-green-50 to-white';
       case 'in-progress':
-        return 'bg-yellow-50 border-yellow-200';
+        return 'border-yellow-500 text-yellow-700 bg-gradient-to-br from-yellow-50 to-white';
       case 'error':
-        return 'bg-red-50 border-red-200';
+        return 'border-red-500 text-red-700 bg-gradient-to-br from-red-50 to-white';
       default:
-        return 'bg-white border-gray-200';
+        return 'border-gray-500 text-gray-700 bg-gradient-to-br from-gray-50 to-white';
     }
   };
 
@@ -74,7 +74,7 @@ const CustomNode = ({ data }: { data: WorkflowStage }) => {
   };
 
   return (
-    <div className={`p-4 rounded-lg border ${getStatusColor(data.status)} w-[250px]`}>
+    <div className={`p-4 rounded-xl border-2 ${getStatusColor(data.status)} w-[250px] shadow-2xl backdrop-blur-sm transition-all duration-200`}>
       <div className="space-y-3">
         <div>
           <h3 className="font-medium text-gray-900">{data.name}</h3>
