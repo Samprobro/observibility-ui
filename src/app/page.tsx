@@ -39,18 +39,23 @@ export default function Dashboard() {
 
   return (
     <main className="min-h-screen p-8 bg-gray-50">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <h1 className="text-3xl font-bold text-gray-900">Log Analysis Dashboard</h1>
-        
-        <StatsCards stats={stats} />
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Sales Order Digital Twin</h1>
+        </div>
         
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4 text-black">Log Level Distribution</h2>
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">Log Analysis Dashboard</h2>
+          <StatsCards stats={stats} />
+        </div>        
+        
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">Log Level Distribution</h2>
           <LogsChart logs={logs} />
         </div>
         
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4 text-black">Log Entries</h2>
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">Log Entries</h2>
           <LogsTable logs={logs} />
         </div>
       </div>

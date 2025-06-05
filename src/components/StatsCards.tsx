@@ -98,7 +98,7 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
       {cards.map((card) => (
         <div
           key={card.title}
@@ -106,47 +106,44 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
             relative group 
             bg-gradient-to-br ${card.gradient}
             backdrop-blur-sm 
-            rounded-2xl 
+            rounded-xl
             border border-white/10
-            shadow-lg ${card.borderGlow}
+            shadow-md ${card.borderGlow}
             transition-all duration-300 
-            hover:scale-105 
-            hover:shadow-xl ${card.hoverGlow}
+            hover:scale-102
+            hover:shadow-lg ${card.hoverGlow}
             overflow-hidden
           `}
         >
-          {/* Glass effect overlay */}
           <div className="absolute inset-0 bg-white/40 backdrop-blur-sm"></div>
-
-          {/* Content */}
-          <div className="relative p-6 h-full">
-            <div className="flex items-center justify-between mb-4">
+          
+          <div className="relative p-4 h-full">
+            <div className="flex items-center justify-between mb-2">
               <div className={`
-                p-3 
-                rounded-xl 
+                p-2 
+                rounded-lg 
                 bg-white/80 
                 backdrop-blur-sm 
                 shadow-inner 
                 border border-white/50
               `}>
                 <card.icon 
-                  className={`h-8 w-8 ${card.iconColor}`} 
+                  className={`h-6 w-6 ${card.iconColor}`} 
                   aria-hidden="true" 
                 />
               </div>
-              <span className={`text-4xl font-bold ${card.iconColor}`}>
+              <span className={`text-2xl font-bold ${card.iconColor}`}>
                 {card.value.toLocaleString()}
               </span>
             </div>
 
-            <div className="space-y-3">
-              <h3 className={`text-base font-semibold ${card.iconColor}`}>
+            <div className="space-y-2">
+              <h3 className={`text-sm font-medium ${card.iconColor}`}>
                 {card.title}
               </h3>
 
-              {/* Progress bar */}
-              <div className="space-y-2">
-                <div className="h-2 w-full bg-black/5 rounded-full overflow-hidden">
+              <div className="space-y-1">
+                <div className="h-1.5 w-full bg-black/5 rounded-full overflow-hidden">
                   <div
                     className={`h-full ${card.progressColor} transition-all duration-500 ease-out`}
                     style={{
@@ -155,20 +152,19 @@ const StatsCards = ({ stats }: StatsCardsProps) => {
                   />
                 </div>
                 <p className={`text-xs font-medium ${card.iconColor}`}>
-                  {((card.value / stats.totalCount) * 100).toFixed(1)}% of total logs
+                  {((card.value / stats.totalCount) * 100).toFixed(1)}% of total
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Decorative corner gradients */}
           <div className={`
-            absolute -top-10 -right-10 w-20 h-20 
+            absolute -top-8 -right-8 w-16 h-16 
             bg-gradient-radial from-white/30 to-transparent 
             rounded-full blur-xl
           `}></div>
           <div className={`
-            absolute -bottom-10 -left-10 w-20 h-20 
+            absolute -bottom-8 -left-8 w-16 h-16 
             bg-gradient-radial from-white/30 to-transparent 
             rounded-full blur-xl
           `}></div>
