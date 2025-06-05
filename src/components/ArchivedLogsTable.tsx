@@ -119,11 +119,11 @@ export default function ArchivedLogsTable({ logs, onViewWorkflow }: ArchivedLogs
                 onChange={(e) => setFilters(prev => ({ ...prev, level: e.target.value as LogLevel | '' }))}
                 className="block w-full rounded-md border border-gray-300 bg-gray-50 px-4 py-2.5 text-black appearance-none pr-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               >
-                <option value="">All Levels</option>
-                <option value="error">Error</option>
-                <option value="warn">Warning</option>
-                <option value="info">Info</option>
-                <option value="debug">Debug</option>
+                <option value="" className='text-gray-400'>All Levels</option>
+                <option value="error" className='text-black'>Error</option>
+                <option value="warn" className='text-black'>Warning</option>
+                <option value="info" className='text-black'>Info</option>
+                <option value="debug" className='text-black'>Debug</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
                 <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
