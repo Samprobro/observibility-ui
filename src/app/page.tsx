@@ -281,6 +281,7 @@ export default function Dashboard() {
                         <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
                           {selectedOrderId}
                         </span>
+                        <span className='text-xs text-red-500'>Imagine the possibilities with this view—once it's fed with proper data, we can clearly trace the journey of an order, highlighting each stage with accurate statuses, detailed info, and intuitive color coding.</span>
                       </h3>
                       <button
                         onClick={() => {
