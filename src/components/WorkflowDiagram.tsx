@@ -102,30 +102,62 @@ export default function WorkflowDiagram({ stages }: WorkflowDiagramProps) {
       id: stage.id,
       type: 'custom',
       data: stage,
-      position: { x: index * 300, y: 0 },
+      position: { 
+        x: index * 350,
+        y: 0 
+      },
       sourcePosition: Position.Right,
       targetPosition: Position.Left,
+      style: {
+        width: 250,
+      }
     }));
   }, [stages]);
 
   const initialEdges: Edge[] = useMemo(() => {
-    return Array.from({ length: stages.length - 1 }, (_, index) => ({
-      id: `edge-${index}`,
-      source: stages[index].id,
-      target: stages[index + 1].id,
-      type: 'smoothstep',
-      animated: stages[index].status === 'in-progress',
-      style: { 
-        strokeWidth: 2,
-        stroke: '#94a3b8'
-      },
-      markerEnd: {
-        type: MarkerType.ArrowClosed,
-        width: 15,
-        height: 15,
-        color: '#94a3b8'
-      },
-    }));
+    return Array.from({ length: stages.length - 1 }, (_, index) => {
+      const sourceStage = stages[index];
+      const targetStage = stages[index + 1];
+      const isActive = sourceStage.status === 'completed' && targetStage.status === 'in-progress';
+      const isCompleted = sourceStage.status === 'completed' && targetStage.status === 'completed';
+      const hasError = sourceStage.status === 'error' || targetStage.status === 'error';
+
+      return {
+        id: `edge-${index}`,
+        source: sourceStage.id,
+        target: targetStage.id,
+        type: 'smoothstep',
+        animated: isActive,
+        style: { 
+          strokeWidth: isActive ? 3 : 2,
+          stroke: hasError ? '#ef4444' : // red-500
+                 isCompleted ? '#22c55e' : // green-500
+                 isActive ? '#eab308' : // yellow-500
+                 '#94a3b8', // gray-400
+        },
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          width: 20,
+          height: 20,
+          color: hasError ? '#ef4444' : // red-500
+                 isCompleted ? '#22c55e' : // green-500
+                 isActive ? '#eab308' : // yellow-500
+                 '#94a3b8', // gray-400
+        },
+        label: isActive ? 'Processing...' : '',
+        labelStyle: { 
+          fill: '#eab308',
+          fontWeight: 500,
+          fontSize: 12
+        },
+        labelBgStyle: { 
+          fill: '#fef3c7',
+          fillOpacity: 0.8,
+          rx: 4,
+          stroke: '#eab308'
+        }
+      };
+    });
   }, [stages]);
 
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
@@ -140,11 +172,17 @@ export default function WorkflowDiagram({ stages }: WorkflowDiagramProps) {
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
         fitView
-        fitViewOptions={{ padding: 0.2 }}
-        attributionPosition="bottom-right"
-        defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+        fitViewOptions={{ 
+          padding: 0.3,
+          includeHiddenNodes: true,
+          minZoom: 0.5,
+          maxZoom: 1 
+        }}
+        defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
         minZoom={0.5}
         maxZoom={1.5}
+        proOptions={{ hideAttribution: true }}
+        className="workflow-diagram"
       >
         <Background color="#f8fafc" gap={16} size={1} />
         <Controls showInteractive={false} />
