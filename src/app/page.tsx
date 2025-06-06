@@ -21,7 +21,26 @@ export default function Dashboard() {
   const [isLive, setIsLive] = useState(true);
   const [activeTab, setActiveTab] = useState('current');
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
-  const [stats, setStats] = useState<LogStats>({
+
+  // Calculate stats from logs
+  const stats: LogStats = logs.reduce((acc, log) => {
+    switch (log.level) {
+      case 'error':
+        acc.errorCount++;
+        break;
+      case 'warn':
+        acc.warningCount++;
+        break;
+      case 'info':
+        acc.infoCount++;
+        break;
+      case 'debug':
+        acc.debugCount++;
+        break;
+    }
+    acc.totalCount++;
+    return acc;
+  }, {
     errorCount: 0,
     fatalCount: 0,
     warningCount: 0,
@@ -38,7 +57,6 @@ export default function Dashboard() {
         const response = await fetch('/api/logs');
         const data = await response.json();
         setLogs(data.logs);
-        setStats(data.stats);
       } catch (error) {
         console.error('Error fetching logs:', error);
       }
@@ -143,7 +161,7 @@ export default function Dashboard() {
           </div>
         </div>
         
-        {/* <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-semibold mb-4 text-gray-900">Log Analysis Dashboard</h2>
           <StatsCards stats={stats} />
         </div>        
@@ -151,7 +169,7 @@ export default function Dashboard() {
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-semibold mb-4 text-gray-900">Log Level Distribution</h2>
           <LogsChart logs={logs} />
-        </div> */}
+        </div> 
         
         <div className="bg-white rounded-lg shadow">
           <div className="border-b border-gray-200">
