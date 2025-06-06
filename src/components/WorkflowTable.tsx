@@ -37,62 +37,116 @@ export default function WorkflowTable({ logs }: WorkflowTableProps) {
   const workflowStages = [
     {
       id: 'order-received',
+      orderId: '1234567890',
       name: 'Order Received',
       status: 'completed' as const,
-      timestamp: '2024-03-05T15:30:00',
+      timestamp: '2024-06-05T15:30:00',
       details: {
-        customer: 'John Doe',
+        customer: 'Sanjay Bhan',
         total: '$599.99',
-        items: 3
+        items: 3,
+        store_id: '1234',
+        store: 'Store adress'
+      }
+    },
+    {
+      id: 'order-awaiting-assignment',
+      orderId: '1234567890',
+      name: 'Awaiting Alignment',
+      status: 'completed' as const,
+      timestamp: '2024-03-05T15:31:00',
+      details: {
+        store: 'Store adress',
+        store_id: '1234',
+        store_name: 'Store Name',
+        items: 3,
+        message: 'Order is awaiting alignment [reason: store not found]'
       }
     },
     {
       id: 'payment-processing',
+      orderId: '1234567890',
       name: 'Payment Processing',
       status: 'completed' as const,
       timestamp: '2024-03-05T15:31:00',
       details: {
         method: 'Credit Card',
-        transaction: 'TXN-789012'
+        transaction: 'TXN-789012',
+        store_id: '1234',
+        store_name: 'Store Name',
+        message: 'Payment processing [reason: ordering from warehouse]'
       }
     },
     {
       id: 'inventory-check',
+      orderId: '1234567890',
       name: 'Inventory Check',
-      status: 'completed' as const,
+      status: 'error' as const,
       timestamp: '2024-03-05T15:32:00',
       details: {
         warehouse: 'NYC-01',
-        availability: 'In Stock'
+        availability: 'In Stock',
+        store_id: '1234',
+        items_list: "Item 1, Item 2, Item 3" 
       }
     },
     {
       id: 'packaging',
+      orderId: '1234567890',
       name: 'Packaging',
-      status: 'completed' as const,
+      status: 'in-progress' as const,
       timestamp: '2024-03-05T15:45:00',
       details: {
         package: 'Standard Box',
-        weight: '2.5 kg'
+        weight: '2.5 kg',
+        store_id: '1234',
+        items_list: "Item 1, Item 2, Item 3" 
       }
     },
     {
       id: 'shipping',
+      orderId: '1234567890',
       name: 'Shipping',
       status: 'in-progress' as const,
       timestamp: '2024-03-05T16:00:00',
       details: {
         carrier: 'FedEx',
-        tracking: 'FDX123456789'
+        tracking: 'FDX123456789',
+        store_id: '1234'
       }
     },
     {
       id: 'delivery',
+      orderId: '1234567890',
       name: 'Delivery',
       status: 'pending' as const,
       details: {
         eta: '2024-03-07',
-        address: '123 Main St'
+        address: '123 Main St',
+        store_id: '1234',
+        items_list: "Item 1, Item 2, Item 3" 
+      }
+    },
+    {
+      id: 'order-implemented',
+      orderId: '1234567890',
+      name: 'Order Implemented',
+      status: 'error' as const,
+      details: {
+        eta: '2024-03-07',
+        address: '123 Main St',
+        store_id: '1234'
+      }
+    },
+    {
+      id: 'order-closed',
+      orderId: '1234567890',
+      name: 'Order Closed',
+      status: 'completed' as const,
+      details: {
+        eta: '2024-03-07',
+        address: '123 Main St',
+        store_id: '1234'
       }
     }
   ];

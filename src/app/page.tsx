@@ -143,7 +143,7 @@ export default function Dashboard() {
           </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow p-6">
+        {/* <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-semibold mb-4 text-gray-900">Log Analysis Dashboard</h2>
           <StatsCards stats={stats} />
         </div>        
@@ -151,7 +151,7 @@ export default function Dashboard() {
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-semibold mb-4 text-gray-900">Log Level Distribution</h2>
           <LogsChart logs={logs} />
-        </div>
+        </div> */}
         
         <div className="bg-white rounded-lg shadow">
           <div className="border-b border-gray-200">
